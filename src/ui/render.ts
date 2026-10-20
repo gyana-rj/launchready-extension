@@ -7,7 +7,7 @@ const SEVERITIES: { severity: Severity; label: string; plural: string }[] = [
 ];
 
 /** Builds an element. Text always goes through textContent, since issue data comes from scanned pages. */
-function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, text?: string): HTMLElementTagNameMap[K] {
+export function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, text?: string): HTMLElementTagNameMap[K] {
   const node = document.createElement(tag);
   if (className) node.className = className;
   if (text !== undefined) node.textContent = text;
@@ -38,8 +38,9 @@ export function renderCounts(container: HTMLElement, issues: Issue[]): void {
   );
 }
 
-function renderIssue(issue: Issue): HTMLElement {
+function renderIssue(issue: Issue, open: boolean): HTMLElement {
   const item = el("details", `issue issue-${issue.severity}`);
+  item.open = open;
   item.dataset.issueId = issue.id;
   item.append(el("summary", undefined, issue.title));
 
@@ -58,14 +59,14 @@ function renderIssue(issue: Issue): HTMLElement {
   return item;
 }
 
-/** Issues grouped by severity, each expandable. */
-export function renderIssueList(container: HTMLElement, issues: Issue[]): void {
+/** Issues grouped by severity, each expandable (collapsed unless `open`). */
+export function renderIssueList(container: HTMLElement, issues: Issue[], options: { open?: boolean } = {}): void {
   const problems = issues.filter((i) => i.severity !== "info");
   const groups = SEVERITIES.flatMap(({ severity, plural }) => {
     const inGroup = issues.filter((i) => i.severity === severity);
     if (!inGroup.length) return [];
     const group = el("section", "issue-group");
-    group.append(el("h3", undefined, `${plural} (${inGroup.length})`), ...inGroup.map(renderIssue));
+    group.append(el("h3", undefined, `${plural} (${inGroup.length})`), ...inGroup.map((issue) => renderIssue(issue, options.open ?? false)));
     return [group];
   });
   const empty = problems.length ? [] : [el("p", "all-clear", "No problems found. This page looks ready to launch.")];

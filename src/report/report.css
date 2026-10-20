@@ -1,4 +1,29 @@
-main { max-width: 760px; margin: 0 auto; padding: 32px 16px; display: grid; gap: 16px; }
+#content { display: grid; gap: 16px; }
+#report { display: grid; gap: 16px; }
+.report-header { display: flex; align-items: center; gap: 16px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
+#logo { max-height: 64px; max-width: 200px; object-fit: contain; }
+.agency { font-size: 18px; font-weight: 700; }
 h1 { font-size: 24px; }
-#report { display: grid; gap: 12px; }
-#page { font-weight: 600; overflow-wrap: anywhere; }
+.meta { margin: 0; display: grid; gap: 4px; }
+.meta div { display: flex; gap: 8px; }
+.meta dt { color: var(--muted); min-width: 100px; }
+.meta dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+
+@page { margin: 16mm; }
+
+/* Printing / saving as PDF: always light, no controls, issues don't split across pages. */
+@media print {
+  :root {
+    color-scheme: light;
+    --bg: #fff; --surface: #fff; --text: #111; --muted: #555; --border: #ccc;
+    --critical: #b71c1c; --critical-bg: #fdeceb; --warning: #8a5300; --warning-bg: #fff4e0;
+    --info: #0d5aa7; --info-bg: #e8f2fc; --good: #1b6e2d; --good-bg: #e6f5e9; --fair: #8a5300; --poor: #b71c1c;
+  }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  body { font-size: 11pt; }
+  .no-print { display: none !important; }
+  .page-main { max-width: none; padding: 0; }
+  .issue { break-inside: avoid; }
+  .issue-group h3 { break-after: avoid; }
+  a { color: inherit; text-decoration: none; }
+}

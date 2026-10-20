@@ -1,20 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { config } from "../../src/config";
 import { getRemainingScans, recordScan } from "../../src/limits";
-
-/** Minimal in-memory chrome.storage.local. */
-function stubChromeStorage(initial: Record<string, unknown> = {}) {
-  const data = { ...initial };
-  vi.stubGlobal("chrome", {
-    storage: {
-      local: {
-        get: async (key: string) => (key in data ? { [key]: data[key] } : {}),
-        set: async (items: Record<string, unknown>) => void Object.assign(data, items),
-      },
-    },
-  });
-  return data;
-}
+import { stubChromeStorage } from "./helpers";
 
 describe("daily scan limit", () => {
   beforeEach(() => {

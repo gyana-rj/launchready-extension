@@ -6,18 +6,48 @@
     <title>LaunchReady Report</title>
   </head>
   <body>
-    <main>
-      <h1>LaunchReady report</h1>
-      <p id="empty" class="muted" hidden>No scan yet. Open the LaunchReady popup and scan a page first.</p>
-      <section id="report" hidden>
-        <p id="page"></p>
-        <p id="date" class="muted"></p>
-        <div class="summary">
-          <div id="score" class="score" aria-label="Score"></div>
-          <div id="counts" class="counts"></div>
+    <main class="page-main">
+      <nav id="nav"></nav>
+      <p id="empty" class="empty-state" hidden>No scan yet. Open the LaunchReady popup and scan a page first.</p>
+
+      <div id="content" hidden>
+        <section id="branding-locked" class="no-print"></section>
+        <section id="branding-panel" class="panel no-print" hidden>
+          <h2>Branding</h2>
+          <label for="agency-input">Agency name <input id="agency-input" type="text" autocomplete="off" /></label>
+          <label for="client-input">Client name <input id="client-input" type="text" autocomplete="off" /></label>
+          <label for="date-input">Report date <input id="date-input" type="date" /></label>
+          <label for="logo-input">Logo <input id="logo-input" type="file" accept="image/*" /></label>
+          <div class="actions">
+            <button id="logo-remove" class="secondary" type="button" hidden>Remove logo</button>
+            <span id="logo-error" class="field-error" role="alert"></span>
+          </div>
+        </section>
+
+        <div class="actions no-print">
+          <button id="print" type="button">Print / Save as PDF</button>
         </div>
-        <div id="issues"></div>
-      </section>
+
+        <article id="report">
+          <header class="report-header">
+            <img id="logo" alt="" hidden />
+            <div>
+              <p id="agency" class="agency" hidden></p>
+              <h1>Website launch readiness report</h1>
+            </div>
+          </header>
+          <dl class="meta">
+            <div id="client-row" hidden><dt>Prepared for</dt><dd id="client"></dd></div>
+            <div><dt>Site</dt><dd id="page"></dd></div>
+            <div><dt>Date</dt><dd id="report-date"></dd></div>
+          </dl>
+          <div class="summary">
+            <div id="score" class="score" aria-label="Score"></div>
+            <div id="counts" class="counts"></div>
+          </div>
+          <div id="issues"></div>
+        </article>
+      </div>
     </main>
     <script type="module" src="./report.ts"></script>
   </body>

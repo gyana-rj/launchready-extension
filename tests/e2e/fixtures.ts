@@ -1,4 +1,4 @@
-import { chromium, expect, test as base, type BrowserContext, type Page } from "@playwright/test";
+import { chromium, expect, test as base, type BrowserContext, type Download, type Page } from "@playwright/test";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -59,3 +59,22 @@ export async function runScan(popup: Page): Promise<void> {
 }
 
 export const issueIds = (popup: Page) => popup.locator("[data-issue-id]").evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.issueId));
+
+export const extensionPage = (extensionId: string, path: string) => `chrome-extension://${extensionId}/${path}`;
+
+/** Activates Pro through the settings page, like a user would. */
+export async function activatePro(context: BrowserContext, extensionId: string): Promise<void> {
+  const settings = await context.newPage();
+  await settings.goto(extensionPage(extensionId, "src/settings/settings.html"));
+  await settings.locator("#key").fill("TEST-PRO");
+  await settings.getByRole("button", { name: "Activate" }).click();
+  await expect(settings.locator("#plan")).toHaveText("Pro plan active");
+  await settings.close();
+}
+
+/** Contents of a downloaded file. */
+export async function readDownload(download: Download): Promise<string> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of await download.createReadStream()) chunks.push(chunk as Buffer);
+  return Buffer.concat(chunks).toString("utf8");
+}

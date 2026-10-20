@@ -17,6 +17,10 @@ npm run dev        # rebuild on change
 3. Click **Load unpacked** and select the `dist/` folder.
 4. Pin LaunchReady and click its icon.
 
+## Pro features and the license stub
+
+Pro features are all gated by `isPro()` in `src/license.ts`. For now the only valid key is `TEST-PRO`: open the extension's **Settings** page (popup footer, or the extension's Options), type it in and click Activate. Pricing numbers live in `src/config.ts`. Pro unlocks unlimited scans, audit history (last 200), CSV export, the branded report (logo, agency, client, date; use **Print / Save as PDF**), and bulk scan of up to 50 URLs. Bulk scan asks for access to the sites you paste (optional host permission) and does not run JavaScript on them.
+
 ## Tests
 
 ```bash
@@ -41,6 +45,8 @@ src/popup/       popup UI
 src/content/     script injected into the scanned tab (runs the engine)
 src/ui/          shared rendering + theme (popup and report)
 src/limits.ts    free daily scan limit
+src/license.ts   Pro license (stub); src/history.ts, csv.ts, bulk.ts, branding.ts
+src/settings/    license key page; src/history/ and src/bulk/ Pro pages
 src/report/      full report page
 src/config.ts    pricing and limits
 public/          manifest.json

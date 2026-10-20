@@ -19,3 +19,18 @@ export interface ScanResult {
   score: number;
   issues: Issue[];
 }
+
+/** A scan saved in the audit history. */
+export interface StoredAudit extends ScanResult {
+  id: string;
+}
+
+/** Report branding (Pro). */
+export interface Branding {
+  agencyName: string;
+  clientName: string;
+  /** YYYY-MM-DD. Empty means "today" when the report is shown. */
+  date: string;
+  /** data: URL of the uploaded logo, or empty. */
+  logo: string;
+}

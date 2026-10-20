@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LaunchReady Settings</title>
+  </head>
+  <body>
+    <main class="page-main">
+      <nav id="nav"></nav>
+      <h1>Settings</h1>
+
+      <section class="panel">
+        <h2>Your plan</h2>
+        <p><strong id="plan">Free plan</strong></p>
+        <p id="plan-detail" class="muted"></p>
+        <p class="muted" id="pricing"></p>
+        <ul id="pro-list">
+          <li>Unlimited scans</li>
+          <li>Audit history (last 200 audits)</li>
+          <li>CSV export</li>
+          <li>Branded client report with your logo, ready to print to PDF</li>
+          <li>Bulk scan of up to 50 URLs</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h2>License key</h2>
+        <form id="license-form">
+          <label for="key">Enter your license key to unlock Pro</label>
+          <input id="key" type="text" autocomplete="off" spellcheck="false" />
+          <div class="actions">
+            <button id="activate" type="submit">Activate</button>
+            <span id="license-message" role="status"></span>
+          </div>
+        </form>
+        <div id="pro-actions" class="actions" hidden>
+          <span id="pro-message" class="field-ok" role="status"></span>
+          <button id="deactivate" class="secondary" type="button">Remove license from this browser</button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./settings.ts"></script>
+  </body>
+</html>

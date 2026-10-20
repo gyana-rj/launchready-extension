@@ -99,3 +99,37 @@ button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); 
 
 .message { padding: 10px 12px; border-radius: 8px; background: var(--warning-bg); color: var(--warning); }
 .message[data-kind="error"] { background: var(--critical-bg); color: var(--critical); }
+
+/* Pro, navigation, forms, tables */
+.button { display: inline-block; font-weight: 600; border-radius: 8px; padding: 9px 14px; background: var(--accent); color: var(--accent-text); text-decoration: none; }
+button.link { background: none; border: none; padding: 2px 0; color: var(--accent); font-weight: 500; }
+button.link:hover { text-decoration: underline; }
+button.danger { background: transparent; color: var(--critical); border-color: var(--border); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pro-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; padding: 2px 6px; border-radius: 999px; background: var(--accent); color: var(--accent-text); vertical-align: middle; }
+
+.nav { display: flex; gap: 16px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.nav a { color: var(--accent); text-decoration: none; }
+.nav a[aria-current="page"] { color: var(--text); font-weight: 600; }
+
+.upgrade { padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); display: grid; gap: 8px; justify-items: start; }
+.upgrade h2 { font-size: 18px; }
+.panel { padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); display: grid; gap: 12px; }
+.panel h2 { font-size: 16px; }
+
+label { display: grid; gap: 4px; font-weight: 600; font-size: 13px; }
+input[type="text"], input[type="date"], textarea {
+  font: inherit; font-weight: 400; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); width: 100%;
+}
+textarea { min-height: 160px; resize: vertical; font-family: ui-monospace, monospace; font-size: 13px; }
+input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field-error { color: var(--critical); font-size: 13px; }
+.field-ok { color: var(--good); font-size: 13px; font-weight: 600; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+td.url { overflow-wrap: anywhere; }
+td.num, th.num { text-align: right; }
+.empty-state { padding: 24px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted); }
+.page-main { max-width: 860px; margin: 0 auto; padding: 24px 16px 48px; display: grid; gap: 16px; }

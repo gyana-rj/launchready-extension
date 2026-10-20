@@ -1,16 +1,24 @@
 import "../ui/theme.css";
 import "./popup.css";
 import { config } from "../config";
+import { auditsToCsv, csvFilename, downloadFile } from "../csv";
+import { addAudit } from "../history";
+import { isPro } from "../license";
 import { getRemainingScans, recordScan } from "../limits";
 import { scanTab } from "../scan";
 import { saveLastScan } from "../store";
 import type { ScanResult } from "../types";
+import { openPage, PAGES } from "../ui/pro";
 import { renderCounts, renderIssueList, renderScore } from "../ui/render";
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const scanButton = $<HTMLButtonElement>("scan");
 
-function showMessage(text: string, kind: "limit" | "error") {
+let current: ScanResult | undefined;
+/** Id of the current scan in the audit history (Pro only). */
+let currentAuditId: string | undefined;
+
+function showMessage(text: string, kind: "limit" | "error" | "upgrade") {
   const message = $("message");
   message.textContent = text;
   message.dataset.kind = kind;
@@ -25,8 +33,18 @@ function showResults(result: ScanResult) {
   $("results").hidden = false;
 }
 
-/** Updates the usage line and the button; returns scans left. */
-async function refreshUsage(): Promise<number> {
+/** Updates the plan badge, usage line and scan button. */
+async function refreshUsage(): Promise<void> {
+  const pro = await isPro();
+  $("pro-badge").hidden = !pro;
+  $("export").textContent = pro ? "Export CSV" : "Export CSV (Pro)";
+
+  if (pro) {
+    $("usage").textContent = "Unlimited scans";
+    scanButton.disabled = false;
+    $("upgrade").hidden = true;
+    return;
+  }
   const left = await getRemainingScans();
   $("usage").textContent = `${left} of ${config.freeScansPerDay} free scans left today`;
   scanButton.disabled = left === 0;
@@ -35,8 +53,8 @@ async function refreshUsage(): Promise<number> {
       `Daily limit reached: you've used all ${config.freeScansPerDay} free scans for today. The limit resets at midnight. Pro gives you unlimited scans.`,
       "limit",
     );
+    $("upgrade").hidden = false;
   }
-  return left;
 }
 
 /** The tab to scan: the active tab, or ?tab=<id> (used by the e2e tests, where the popup is opened as a tab). */
@@ -48,7 +66,8 @@ async function targetTabId(): Promise<number | undefined> {
 }
 
 async function onScan() {
-  if ((await getRemainingScans()) === 0) return void (await refreshUsage());
+  const pro = await isPro();
+  if (!pro && (await getRemainingScans()) === 0) return void (await refreshUsage());
 
   scanButton.disabled = true;
   scanButton.textContent = "Scanning…";
@@ -57,8 +76,10 @@ async function onScan() {
     const tabId = await targetTabId();
     if (tabId === undefined) throw new Error("No active tab");
     const result = await scanTab(tabId);
-    await recordScan();
+    if (pro) currentAuditId = (await addAudit(result)).id;
+    else await recordScan();
     await saveLastScan(result);
+    current = result;
     showResults(result);
   } catch {
     showMessage(
@@ -73,6 +94,19 @@ async function onScan() {
 
 scanButton.addEventListener("click", onScan);
 $("report").addEventListener("click", () => {
-  void chrome.tabs.create({ url: chrome.runtime.getURL("src/report/report.html") });
+  openPage(currentAuditId ? `${PAGES.report}?id=${encodeURIComponent(currentAuditId)}` : PAGES.report);
 });
+$("export").addEventListener("click", async () => {
+  if (!current) return;
+  if (!(await isPro())) {
+    showMessage("CSV export is a Pro feature. Upgrade to download your results.", "upgrade");
+    $("upgrade").hidden = false;
+    return;
+  }
+  downloadFile(csvFilename([current]), auditsToCsv([current]));
+});
+$("upgrade").addEventListener("click", () => openPage(PAGES.settings));
+$("link-history").addEventListener("click", () => openPage(PAGES.history));
+$("link-bulk").addEventListener("click", () => openPage(PAGES.bulk));
+$("link-settings").addEventListener("click", () => openPage(PAGES.settings));
 void refreshUsage();

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LaunchReady Bulk Scan</title>
+  </head>
+  <body>
+    <main class="page-main">
+      <nav id="nav"></nav>
+      <h1>Bulk scan</h1>
+      <div id="locked"></div>
+      <section id="content" class="panel" hidden>
+        <p id="js-note" class="message" data-kind="note">
+          JavaScript-rendered content is not included. Pages are fetched as raw HTML and parsed without running scripts, so anything a
+          script adds after load is not checked. Broken-link checks are also skipped in bulk scans.
+        </p>
+        <label for="urls">Paste up to 50 URLs, one per line</label>
+        <textarea id="urls" placeholder="https://example.com/&#10;https://example.com/about" spellcheck="false"></textarea>
+        <div class="actions">
+          <button id="start" type="button">Start bulk scan</button>
+          <button id="export" class="secondary" type="button" hidden>Export CSV</button>
+          <span id="progress" class="muted" role="status"></span>
+        </div>
+        <p id="notice" class="message" hidden></p>
+        <table id="table" hidden>
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th class="num">Score</th>
+              <th class="num">Critical</th>
+              <th class="num">Warnings</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+    </main>
+    <script type="module" src="./bulk.ts"></script>
+  </body>
+</html>

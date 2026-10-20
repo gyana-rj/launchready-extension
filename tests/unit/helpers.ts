@@ -16,3 +16,20 @@ export function parse(html: string): Document {
 export function loadFixture(name: string): Document {
   return parse(readFixture(name));
 }
+
+import { vi } from "vitest";
+
+/** Minimal in-memory chrome.storage.local. Returns the backing object. */
+export function stubChromeStorage(initial: Record<string, unknown> = {}): Record<string, unknown> {
+  const data = { ...initial };
+  vi.stubGlobal("chrome", {
+    storage: {
+      local: {
+        get: async (key: string) => (key in data ? { [key]: data[key] } : {}),
+        set: async (items: Record<string, unknown>) => void Object.assign(data, items),
+        remove: async (key: string) => void delete data[key],
+      },
+    },
+  });
+  return data;
+}

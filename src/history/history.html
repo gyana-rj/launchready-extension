@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LaunchReady History</title>
+  </head>
+  <body>
+    <main class="page-main">
+      <nav id="nav"></nav>
+      <h1>Audit history</h1>
+      <div id="locked"></div>
+      <section id="content" hidden>
+        <div class="actions">
+          <button id="export" type="button">Export CSV</button>
+          <button id="clear" class="danger" type="button">Clear history</button>
+          <span id="count" class="muted"></span>
+        </div>
+        <p id="empty" class="empty-state" hidden>No audits yet. Scan a page and it will be saved here.</p>
+        <table id="table" hidden>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Page</th>
+              <th class="num">Score</th>
+              <th class="num">Critical</th>
+              <th class="num">Warnings</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+    </main>
+    <script type="module" src="./history.ts"></script>
+  </body>
+</html>
