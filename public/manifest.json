@@ -3,6 +3,7 @@
   "name": "LaunchReady",
   "version": "0.1.0",
   "description": "Pre-launch website checker. Finds launch mistakes and tells you how to fix them. Runs entirely in your browser.",
+  "minimum_chrome_version": "110",
   "permissions": [
     "activeTab",
     "storage",

@@ -17,6 +17,11 @@ describe("getSameOriginLinks", () => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     expect(getSameOriginLinks(doc, PAGE_URL)).toEqual([`${PAGE_URL}a`, `${PAGE_URL}b`]);
   });
+  it("leaves out links that look like actions, since the check sends the user's cookies", () => {
+    const hrefs = ["/logout", "/account/sign-out", "/unsubscribe?token=abc", "/settings?action=delete", "/cart/remove/12", "/logout.php", "/orders?cancel=1", "/blog/delete-your-cache", "/about", "/pricing?plan=remove-ads-pro"];
+    const doc = new DOMParser().parseFromString(hrefs.map((h) => `<a href="${h}">x</a>`).join(""), "text/html");
+    expect(getSameOriginLinks(doc, PAGE_URL)).toEqual([`${PAGE_URL}blog/delete-your-cache`, `${PAGE_URL}about`, `${PAGE_URL}pricing?plan=remove-ads-pro`]);
+  });
   it("stops at the limit", () => {
     const html = Array.from({ length: 80 }, (_, i) => `<a href="/p${i}">x</a>`).join("");
     const doc = new DOMParser().parseFromString(html, "text/html");

@@ -9,14 +9,15 @@ const SUPERSAMPLE = 4;
 
 // Everything is in a 0..1 square.
 const RADIUS = 0.22;
-const MARGIN = 0.02;
+// Toolbar sizes fill the square. The 128 px store icon follows Chrome's guideline: 96 px of artwork, 16 px transparent padding.
+const MARGIN_FOR = (size) => (size === 128 ? 0.125 : 0.02);
 const CHECK = [[0.27, 0.53], [0.44, 0.7], [0.74, 0.34]];
 const CHECK_HALF_WIDTH = 0.065;
 const TOP = [0x3b, 0x6d, 0xf0];
 const BOTTOM = [0x1d, 0x46, 0xb5];
 
-function insideRoundedSquare(x, y) {
-  const half = 0.5 - MARGIN;
+function insideRoundedSquare(x, y, margin) {
+  const half = 0.5 - margin;
   const dx = Math.max(Math.abs(x - 0.5) - (half - RADIUS), 0);
   const dy = Math.max(Math.abs(y - 0.5) - (half - RADIUS), 0);
   return dx * dx + dy * dy <= RADIUS * RADIUS;
@@ -33,6 +34,7 @@ function insideCheck(x, y) {
 }
 
 function render(size) {
+  const margin = MARGIN_FOR(size);
   const pixels = Buffer.alloc(size * size * 4);
   for (let py = 0; py < size; py++) {
     for (let px = 0; px < size; px++) {
@@ -41,7 +43,7 @@ function render(size) {
         for (let sx = 0; sx < SUPERSAMPLE; sx++) {
           const x = (px + (sx + 0.5) / SUPERSAMPLE) / size;
           const y = (py + (sy + 0.5) / SUPERSAMPLE) / size;
-          if (!insideRoundedSquare(x, y)) continue;
+          if (!insideRoundedSquare(x, y, margin)) continue;
           a++;
           if (insideCheck(x, y)) {
             r += 255;

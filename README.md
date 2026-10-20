@@ -21,6 +21,8 @@ npm run dev        # rebuild on change
 
 Pro features are all gated by `isPro()` in `src/license.ts`. For now the only valid key is `TEST-PRO`: open the extension's **Settings** page (popup footer, or the extension's Options), type it in and click Activate. Pricing numbers live in `src/config.ts`. Pro unlocks unlimited scans, audit history (last 200), CSV export, the branded report (logo, agency, client, date; use **Print / Save as PDF**), and bulk scan of up to 50 URLs. Bulk scan asks for access to the sites you paste (optional host permission) and does not run JavaScript on them.
 
+Note: the broken-link check sends requests with your own session cookies, so it skips links that look like actions (`/logout`, `/unsubscribe`, `/delete`, `?action=remove`…).
+
 ## Publishing
 
 - `STORE_LISTING.md` has the Chrome Web Store text (short and full description, features, permission justifications, asset checklist, pre-submit to-do list).
