@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "LaunchReady",
+  "version": "0.1.0",
+  "description": "Pre-launch website checker. Finds launch mistakes and tells you how to fix them. Runs entirely in your browser.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "action": {
+    "default_title": "LaunchReady",
+    "default_popup": "src/popup/popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
