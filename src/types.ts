@@ -9,3 +9,13 @@ export interface Issue {
   /** CSS selectors or snippets, max 10. */
   elements: string[];
 }
+
+export interface ScanResult {
+  url: string;
+  title: string;
+  /** Epoch milliseconds. */
+  scannedAt: number;
+  /** 0-100. */
+  score: number;
+  issues: Issue[];
+}

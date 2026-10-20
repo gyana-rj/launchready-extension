@@ -6,7 +6,19 @@
     <title>LaunchReady Report</title>
   </head>
   <body>
-    <main id="report"><h1>Report</h1></main>
+    <main>
+      <h1>LaunchReady report</h1>
+      <p id="empty" class="muted" hidden>No scan yet. Open the LaunchReady popup and scan a page first.</p>
+      <section id="report" hidden>
+        <p id="page"></p>
+        <p id="date" class="muted"></p>
+        <div class="summary">
+          <div id="score" class="score" aria-label="Score"></div>
+          <div id="counts" class="counts"></div>
+        </div>
+        <div id="issues"></div>
+      </section>
+    </main>
     <script type="module" src="./report.ts"></script>
   </body>
 </html>

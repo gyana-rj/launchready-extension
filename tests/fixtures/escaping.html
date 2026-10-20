@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Escaping check</title>
+  </head>
+  <body>
+    <h1>Escaping check</h1>
+    <!-- Issue snippets must be shown as text in the popup, never parsed as HTML. -->
+    <img src="x" onerror="document.title = 'hacked'">
+  </body>
+</html>

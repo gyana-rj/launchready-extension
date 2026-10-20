@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && vite build -c vite.content.config.ts",
+    "build:e2e": "tsc --noEmit && vite build --mode e2e && vite build -c vite.content.config.ts --mode e2e",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "e2e": "npm run build && playwright test"
+    "e2e": "npm run build:e2e && playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

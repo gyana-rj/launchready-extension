@@ -4,12 +4,26 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>LaunchReady</title>
-    <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
     <main>
-      <h1>LaunchReady</h1>
-      <p id="status">Ready.</p>
+      <header>
+        <h1>LaunchReady</h1>
+        <span id="usage" class="muted"></span>
+      </header>
+
+      <button id="scan" type="button">Scan this page</button>
+      <p id="message" class="message" role="status" hidden></p>
+
+      <section id="results" hidden>
+        <p id="page" class="muted"></p>
+        <div class="summary">
+          <div id="score" class="score" aria-label="Score"></div>
+          <div id="counts" class="counts"></div>
+        </div>
+        <button id="report" class="secondary" type="button">Open full report</button>
+        <div id="issues"></div>
+      </section>
     </main>
     <script type="module" src="./popup.ts"></script>
   </body>

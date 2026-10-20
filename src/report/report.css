@@ -1,0 +1,4 @@
+main { max-width: 760px; margin: 0 auto; padding: 32px 16px; display: grid; gap: 16px; }
+h1 { font-size: 24px; }
+#report { display: grid; gap: 12px; }
+#page { font-weight: 600; overflow-wrap: anywhere; }
