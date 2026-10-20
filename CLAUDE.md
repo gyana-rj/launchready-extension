@@ -69,7 +69,7 @@ Popup: "Scan this page" button, score out of 100, issue counts per severity, exp
 
 ## Progress
 - [x] Phase 1: Project setup (Vite 8 + TS, MV3 manifest, Vitest + Playwright sample tests, README). Note: in sandboxes run e2e with `CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome`.
-- [ ] Phase 2: Audit engine
+- [x] Phase 2: Audit engine — all spec checks in `src/engine/checks/{critical,warnings,info}.ts`; `runAudit(doc, ctx)` returns `{ issues, score }` (score = 100 − 15 per critical − 5 per warning, min 0, info free; weights in `src/engine/score.ts`). Broken-link check is pure over `ctx.linkResults`; the network part (`getSameOriginLinks`, `checkLinks`: HEAD then GET fallback) is in `src/engine/linkChecker.ts` for Phase 3 to call. Fixtures: `tests/fixtures/<check>.bad.html` / `.good.html` (generated from one baseline page; `good.html` is the all-passing baseline). 71 unit tests.
 - [ ] Phase 3: Popup UI + scanning + free limit + e2e
 - [ ] Phase 4: Pro features
 - [ ] Phase 5: Polish

@@ -33,7 +33,7 @@ CHROMIUM_PATH=/path/to/chrome npm run e2e
 ## Layout
 
 ```
-src/audit/       pure audit engine (Document -> Issue[])
+src/engine/      pure audit engine (Document -> issues + score)
 src/background/  service worker
 src/popup/       popup UI
 src/report/      full report page
