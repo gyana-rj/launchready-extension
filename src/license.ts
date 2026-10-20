@@ -1,9 +1,14 @@
+import { BETA_MODE } from "./config";
+
 // The single place that decides whether the user is Pro. Every Pro feature calls isPro().
 // STUB: keys are checked against a local list. Replace isValidKey() with the payment
 // provider's validation later; nothing else needs to change.
 
 const STORAGE_KEY = "license";
-const STUB_KEYS = new Set(["TEST-PRO"]);
+// The test key is only compiled in when VITE_ENABLE_TEST_KEY=true (test and e2e builds, see .env.test
+// and .env.e2e). In a production build this folds to an empty list, so "TEST-PRO" never ships.
+// tests/unit/bundle.test.ts checks that.
+const STUB_KEYS = new Set<string>(import.meta.env.VITE_ENABLE_TEST_KEY === "true" ? ["TEST-PRO"] : []);
 
 export type ActivationResult = { ok: true } | { ok: false; error: string };
 
@@ -16,6 +21,7 @@ function isValidKey(key: string): boolean {
 }
 
 export async function isPro(): Promise<boolean> {
+  if (BETA_MODE) return true;
   const stored = (await chrome.storage.local.get(STORAGE_KEY))[STORAGE_KEY] as { key?: string } | undefined;
   return !!stored?.key && isValidKey(stored.key);
 }

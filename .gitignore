@@ -3,3 +3,5 @@ dist
 test-results
 playwright-report
 dist-e2e
+dist-e2e-beta
+*.zip

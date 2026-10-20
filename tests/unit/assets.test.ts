@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { BETA_MODE, FEEDBACK_EMAIL, FEEDBACK_URL } from "../../src/config";
 
 const root = resolve(import.meta.dirname, "../..");
 const manifest = JSON.parse(readFileSync(resolve(root, "public/manifest.json"), "utf8"));
@@ -54,9 +55,39 @@ describe("privacy policy page", () => {
     expect(html).toContain("No data leaves your browser");
   });
 
+  it("has the real contact email, no placeholder, and it matches the feedback link", () => {
+    expect(FEEDBACK_EMAIL).toBe("devgyanaranjan@gmail.com");
+    expect(html).toContain(`href="mailto:${FEEDBACK_EMAIL}"`);
+    expect(html).not.toMatch(/add your contact email|\[YOUR EMAIL\]/i);
+    expect(FEEDBACK_URL).toBe("mailto:devgyanaranjan@gmail.com?subject=LaunchReady%20feedback");
+  });
+
+  it("describes the free beta and doesn't mention license keys being required", () => {
+    expect(html).toContain("free beta");
+    expect(html).not.toMatch(/license key that is checked/i);
+  });
+
   it("is self-contained: no scripts and no external resources", () => {
     expect(html).not.toMatch(/<script/i);
     expect(html).not.toMatch(/<link[^>]+href=/i);
     expect(html).not.toMatch(/(src|href)="https?:/i);
+  });
+});
+
+describe("release", () => {
+  it("manifest and package.json agree on version 1.0.0", () => {
+    const pkg = JSON.parse(readFileSync(resolve(root, "package.json"), "utf8"));
+    expect(manifest.version).toBe("1.0.0");
+    expect(pkg.version).toBe(manifest.version);
+  });
+
+  it("unit tests run with beta off so the Free and Pro tiers stay covered", () => {
+    expect(BETA_MODE).toBe(false);
+  });
+
+  it("the store listing no longer has unchecked placeholders for the email or the test key", () => {
+    const listing = readFileSync(resolve(root, "STORE_LISTING.md"), "utf8");
+    expect(listing).not.toMatch(/add your contact email/i);
+    expect(listing).toContain("FREE DURING BETA");
   });
 });

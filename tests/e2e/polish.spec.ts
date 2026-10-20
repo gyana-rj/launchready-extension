@@ -195,6 +195,17 @@ test.describe("icons and privacy", () => {
     await expect(settings.getByRole("link", { name: "Privacy" })).toHaveAttribute("href", extensionPage(extensionId, "src/privacy/privacy.html"));
   });
 
+  test("the popup has a Send feedback link, and the policy has the contact email", async ({ context, extensionId }) => {
+    const popup = await openPopupFor(context, extensionId, `${SITE}/good.html`);
+    await expect(popup.getByRole("link", { name: "Send feedback" })).toHaveAttribute(
+      "href",
+      "mailto:devgyanaranjan@gmail.com?subject=LaunchReady%20feedback",
+    );
+    const privacy = await context.newPage();
+    await privacy.goto(extensionPage(extensionId, "src/privacy/privacy.html"));
+    await expect(privacy.getByRole("link", { name: "devgyanaranjan@gmail.com" })).toBeVisible();
+  });
+
   test("no data leaves the browser: the only network requests are to the scanned sites", async ({ context, extensionId }) => {
     const requested: string[] = [];
     context.on("request", (request) => requested.push(request.url()));

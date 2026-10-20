@@ -7,3 +7,5 @@ h1 { font-size: 18px; }
 #page { font-size: 12px; overflow-wrap: anywhere; }
 #issues { max-height: 320px; overflow-y: auto; padding-right: 2px; }
 footer { display: flex; gap: 16px; padding-top: 8px; border-top: 1px solid var(--border); }
+footer a.link { color: var(--accent); text-decoration: none; margin-left: auto; }
+footer a.link:hover { text-decoration: underline; }

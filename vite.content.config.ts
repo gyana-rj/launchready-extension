@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 export default defineConfig(({ mode }) => ({
   publicDir: false, // the main build already copied public/ (and may have edited manifest.json)
   build: {
-    outDir: mode === "e2e" ? "dist-e2e" : "dist",
+    outDir: mode.startsWith("e2e") ? `dist-${mode}` : "dist",
     emptyOutDir: false,
     target: "es2022",
     lib: {

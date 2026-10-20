@@ -1,12 +1,13 @@
 {
   "name": "launchready-extension",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",
     "build": "tsc --noEmit && vite build && vite build -c vite.content.config.ts",
-    "build:e2e": "tsc --noEmit && vite build --mode e2e && vite build -c vite.content.config.ts --mode e2e",
+    "build:e2e": "tsc --noEmit && vite build --mode e2e && vite build -c vite.content.config.ts --mode e2e && vite build --mode e2e-beta && vite build -c vite.content.config.ts --mode e2e-beta",
+    "package": "npm run build && node scripts/package.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e": "npm run build:e2e && playwright test"

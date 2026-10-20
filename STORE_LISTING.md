@@ -54,16 +54,15 @@ Info
 HOW IT WORKS
 Open the page you want to check, click the LaunchReady icon, and press "Scan this page". You get a score out of 100, the number of critical issues, warnings and notes, and a list you can expand to see the fix for each one.
 
-FREE
-• 5 scans per day
-• Full issue list with how-to-fix guidance
-
-PRO
+FREE DURING BETA
+LaunchReady is in free beta, and every feature is included:
 • Unlimited scans
 • Audit history (your last 200 scans)
 • CSV export
 • Branded client report with your logo, agency name, client name and date, ready to save as a PDF
 • Bulk scan of up to 50 pasted URLs (pages are checked as raw HTML; content that only appears after JavaScript runs is not included)
+
+Found a bug or want a check added? Use "Send feedback" in the popup.
 
 PRIVATE BY DESIGN
 • No account, no analytics, no ads, no tracking
@@ -78,9 +77,10 @@ PRIVATE BY DESIGN
 - Plain-language explanation and fix for every issue
 - Score out of 100 with critical, warning and info counts
 - Checks response headers, robots.txt and same-site links, not just the HTML
-- Branded, print-ready client reports (Pro)
-- Audit history and CSV export (Pro)
-- Bulk scan up to 50 URLs (Pro)
+- Branded, print-ready client reports
+- Audit history and CSV export
+- Bulk scan up to 50 URLs
+- Free during beta, with every feature unlocked
 - Light and dark mode
 - 100% local: no servers, no tracking
 
@@ -95,7 +95,7 @@ Scan the web page the user chooses for common pre-launch mistakes (SEO, metadata
 | --- | --- |
 | `activeTab` | Lets the extension run its checks on the tab the user is looking at, only after they click the extension. |
 | `scripting` | Injects the audit script into that tab to read its HTML and fetch its headers, robots.txt and links. |
-| `storage` | Keeps the daily scan count, the last scan, Pro audit history, the license key and report branding on the user's device. |
+| `storage` | Keeps the last scan, the audit history and the report branding on the user's device. |
 | Optional host permissions (`http://*/*`, `https://*/*`) | Requested at the moment the user starts a bulk scan, only for the sites they pasted, so the browser can fetch those pages. Never requested otherwise. |
 
 **Remote code**
@@ -105,7 +105,7 @@ No. All code is bundled in the extension.
 Declare that the extension does **not** collect or transmit any of the listed user data types. The page content it reads is processed locally and never leaves the browser. Tick all three certifications (no selling data, no use unrelated to the single purpose, no creditworthiness or lending use).
 
 **Privacy policy URL**
-Required by the Web Store and it must be a public web address. The policy is `src/privacy/privacy.html`. It is a single self-contained file (inline styles, no scripts), so publish `dist/src/privacy/privacy.html` on your website (GitHub Pages works) and paste that URL here. Add a contact email to the policy first (search for "add your contact email").
+Required by the Web Store and it must be a public web address. The policy is `src/privacy/privacy.html` (contact email already set). It is a single self-contained file (inline styles, no scripts), so publish `dist/src/privacy/privacy.html` on your website (GitHub Pages works) and paste that URL here.
 
 ## Store assets to produce
 
@@ -118,9 +118,15 @@ Required by the Web Store and it must be a public web address. The policy is `sr
   5. Popup in dark mode
 - [ ] Small promo tile, 440×280 (optional but recommended)
 
-## Before submitting
+## Before submitting (free beta, v1.0.0)
 
-- [ ] Choose the final product name and update the manifest, this file and the privacy policy.
-- [ ] Add the contact email to the privacy policy and publish it at a public URL.
-- [ ] Wire real license checking in `src/license.ts` (today it is a stub that accepts a test key) and update the privacy policy to say what is sent. Do not list Pro prices publicly until buying a license works. Prices are in `src/config.ts`.
-- [ ] Bump `version` in `public/manifest.json`, run `npm run build`, and zip the contents of `dist/`.
+- [x] Contact email set in the privacy policy and in the popup's "Send feedback" link (`src/config.ts`).
+- [x] Free beta: `BETA_MODE` is on in the production build, so there are no upgrade prompts, prices or license field. The `TEST-PRO` key is not in the production bundle (a unit test checks it).
+- [ ] Choose the final product name (trademark check) and update the manifest, this file and the privacy policy.
+- [ ] Publish the privacy policy at a public URL and paste it into the Privacy tab.
+- [ ] Take the screenshots (and optionally the promo tile).
+- [ ] Test the real toolbar-click flow and the bulk-scan permission prompt once in normal Chrome (automated tests can't click the toolbar).
+- [ ] Build the upload zip with `npm run package` (creates `launchready-1.0.0.zip`).
+
+### When the beta ends
+Set `BETA_MODE` to false in `src/config.ts`, wire real license checking in `src/license.ts` (there is no valid key in production builds today, so nobody could unlock Pro), update this listing and the privacy policy (say what the license check sends), and bump the version.

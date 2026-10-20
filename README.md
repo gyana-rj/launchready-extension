@@ -17,9 +17,17 @@ npm run dev        # rebuild on change
 3. Click **Load unpacked** and select the `dist/` folder.
 4. Pin LaunchReady and click its icon.
 
+## Free beta (v1.0)
+
+`BETA_MODE` in `src/config.ts` is on, so every feature is free: the popup and Settings say "Free during beta" and there are no upgrade prompts, prices or license field. To bring back the Free/Pro tiers, set it to `false` (or build with `VITE_BETA_MODE=false`).
+
+Build flags live in env files: production uses neither flag; `.env.test` and `.env.e2e` turn beta off and enable the `TEST-PRO` key; `.env.e2e-beta` is production-like for the beta e2e tests. The `TEST-PRO` key is only compiled into those test builds, never into `dist/`.
+
+To make the Web Store upload: `npm run package` builds and writes `launchready-<version>.zip` (it refuses to package a build that contains the test key or test permissions).
+
 ## Pro features and the license stub
 
-Pro features are all gated by `isPro()` in `src/license.ts`. For now the only valid key is `TEST-PRO`: open the extension's **Settings** page (popup footer, or the extension's Options), type it in and click Activate. Pricing numbers live in `src/config.ts`. Pro unlocks unlimited scans, audit history (last 200), CSV export, the branded report (logo, agency, client, date; use **Print / Save as PDF**), and bulk scan of up to 50 URLs. Bulk scan asks for access to the sites you paste (optional host permission) and does not run JavaScript on them.
+Pro features are all gated by `isPro()` in `src/license.ts`. With `BETA_MODE` off, in test builds only, the valid key is `TEST-PRO`: open the extension's **Settings** page (popup footer, or the extension's Options), type it in and click Activate. Pricing numbers live in `src/config.ts`. Pro unlocks unlimited scans, audit history (last 200), CSV export, the branded report (logo, agency, client, date; use **Print / Save as PDF**), and bulk scan of up to 50 URLs. Bulk scan asks for access to the sites you paste (optional host permission) and does not run JavaScript on them.
 
 Note: the broken-link check sends requests with your own session cookies, so it skips links that look like actions (`/logout`, `/unsubscribe`, `/delete`, `?action=remove`…).
 

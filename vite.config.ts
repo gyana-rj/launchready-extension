@@ -17,12 +17,12 @@ function e2eManifest(): Plugin {
 
 // Multi-entry build: popup + report pages, and the background service worker
 // (fixed filename so manifest.json can reference it). The content script is built by vite.content.config.ts.
-// `vite build --mode e2e` writes to dist-e2e with the extra test permission.
+// `vite build --mode e2e` (and `e2e-beta`) write to dist-<mode> with the extra test permission.
 export default defineConfig(({ mode }) => ({
   base: "./",
-  plugins: mode === "e2e" ? [e2eManifest()] : [],
+  plugins: mode.startsWith("e2e") ? [e2eManifest()] : [],
   build: {
-    outDir: mode === "e2e" ? "dist-e2e" : "dist",
+    outDir: mode.startsWith("e2e") ? `dist-${mode}` : "dist",
     emptyOutDir: true,
     target: "es2022",
     rollupOptions: {

@@ -1,6 +1,6 @@
 import "../ui/theme.css";
 import "./popup.css";
-import { config } from "../config";
+import { BETA_MODE, config, FEEDBACK_URL } from "../config";
 import { describeScanError } from "../errors";
 import { auditsToCsv, csvFilename, downloadFile } from "../csv";
 import { addAudit } from "../history";
@@ -38,6 +38,8 @@ function showResults(result: ScanResult) {
 /** Updates the plan badge, usage line and scan button. */
 async function refreshUsage(): Promise<void> {
   const pro = await isPro();
+  // In the free beta everyone is Pro, so the badge says so instead of "PRO".
+  $("pro-badge").textContent = BETA_MODE ? "Free during beta" : "PRO";
   $("pro-badge").hidden = !pro;
   $("export").textContent = pro ? "Export CSV" : "Export CSV (Pro)";
 
@@ -134,4 +136,5 @@ $("link-history").addEventListener("click", () => openPage(PAGES.history));
 $("link-bulk").addEventListener("click", () => openPage(PAGES.bulk));
 $("link-settings").addEventListener("click", () => openPage(PAGES.settings));
 $("link-privacy").addEventListener("click", () => openPage(PAGES.privacy));
+$<HTMLAnchorElement>("link-feedback").href = FEEDBACK_URL;
 void refreshUsage();

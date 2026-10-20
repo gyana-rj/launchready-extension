@@ -3,15 +3,20 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-const extensionPath = resolve("dist-e2e");
+export interface ExtensionOptions {
+  /** Folder of the built extension to load (dist-e2e or dist-e2e-beta). Set per project in playwright.config.ts. */
+  extensionDir: string;
+}
 
 /** Test pages live on a fake domain that resolves to the local fixture server. */
 export const SITE = "http://www.acme-plumbing.test:4173";
 export const BLOCKED_SITE = "http://blocked.acme-plumbing.test:4173";
 
-export const test = base.extend<{ context: BrowserContext; extensionId: string }>({
+export const test = base.extend<ExtensionOptions & { context: BrowserContext; extensionId: string }>({
+  extensionDir: ["dist-e2e", { option: true }],
   // A fresh browser profile per test, so scan counts and storage start empty.
-  context: async ({}, use) => {
+  context: async ({ extensionDir }, use) => {
+    const extensionPath = resolve(extensionDir);
     const context = await chromium.launchPersistentContext(mkdtempSync(join(tmpdir(), "lr-")), {
       // Set CHROMIUM_PATH if Playwright's own browser download is unavailable.
       executablePath: process.env.CHROMIUM_PATH || undefined,
