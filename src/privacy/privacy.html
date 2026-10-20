@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LaunchReady Privacy Policy</title>
+    <!-- Self-contained (inline style, no scripts) so this one file can also be hosted on a website for the Chrome Web Store. -->
+    <style>
+      :root { color-scheme: light dark; --bg: #fff; --text: #161b22; --muted: #586274; --border: #dde2e9; --surface: #f4f6f9; --accent: #2557d6; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #14171c; --text: #e8ecf2; --muted: #9aa5b6; --border: #2f3641; --surface: #1d222a; --accent: #6c97ff; } }
+      body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+      main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+      h1 { font-size: 28px; margin: 0 0 4px; }
+      h2 { font-size: 19px; margin: 32px 0 8px; }
+      p, li { margin: 8px 0; }
+      .muted { color: var(--muted); }
+      .summary { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 24px 0; font-weight: 600; }
+      a { color: var(--accent); }
+      code { background: var(--surface); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>LaunchReady privacy policy</h1>
+      <p class="muted">Last updated: 20 October 2026</p>
+
+      <p class="summary" id="summary">No data leaves your browser. LaunchReady has no servers, no accounts, no analytics and no ads.</p>
+
+      <h2>What LaunchReady does</h2>
+      <p>
+        LaunchReady checks a web page for common launch mistakes (such as a noindex tag, a staging address in the canonical link, or a
+        missing title) and explains how to fix them. Every check runs inside your browser.
+      </p>
+
+      <h2>What it reads</h2>
+      <ul>
+        <li>The page you ask it to scan: its HTML, and the response headers, <code>robots.txt</code> and same-site links of that page.</li>
+        <li>For a bulk scan (Pro), the web addresses you paste in, fetched by your browser directly from those sites.</li>
+      </ul>
+      <p>
+        These requests go from your browser to the website being checked, just like visiting it. They never go to us or to any third party.
+        LaunchReady only scans when you click Scan or Start bulk scan.
+      </p>
+
+      <h2>What it stores, and where</h2>
+      <p>
+        The following is saved on your device only, in the browser's extension storage (<code>chrome.storage.local</code>). It is never sent anywhere.
+      </p>
+      <ul>
+        <li>How many free scans you have used today.</li>
+        <li>Your most recent scan result.</li>
+        <li>Pro: your audit history (up to 200 audits), your license key, and your report branding (agency name, client name, date and logo).</li>
+      </ul>
+      <p>
+        You can delete the history on the History page, remove your license on the Settings page, and remove everything by uninstalling the
+        extension.
+      </p>
+
+      <h2>What it does not do</h2>
+      <ul>
+        <li>It does not collect, sell or share personal data or browsing history.</li>
+        <li>It does not use analytics, tracking, advertising or crash reporting.</li>
+        <li>It does not load or run code from the internet. All code ships inside the extension.</li>
+        <li>It does not scan pages in the background or on its own.</li>
+      </ul>
+
+      <h2>Permissions</h2>
+      <ul>
+        <li><strong>activeTab</strong> and <strong>scripting</strong>: to run the checks on the page you chose to scan, when you click the extension.</li>
+        <li><strong>storage</strong>: to keep the local data listed above.</li>
+        <li><strong>Optional site access</strong>: only requested when you run a bulk scan, so your browser can fetch the pages you pasted. You can revoke it at any time in <code>chrome://extensions</code>.</li>
+      </ul>
+
+      <h2>Licensing and payments</h2>
+      <p>
+        Pro is unlocked with a license key that is checked on your device. If online license verification or payments are added in future,
+        this policy will be updated before that change ships, and it will say exactly what is sent.
+      </p>
+
+      <h2>Contact</h2>
+      <p>Questions about this policy: [add your contact email before publishing].</p>
+    </main>
+  </body>
+</html>

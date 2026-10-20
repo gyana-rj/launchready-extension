@@ -8,16 +8,19 @@
   <body>
     <main>
       <header>
-        <h1>LaunchReady <span id="pro-badge" class="pro-badge" hidden>PRO</span></h1>
+        <div class="brand"><img src="/icons/icon-32.png" alt="" /><h1>LaunchReady <span id="pro-badge" class="pro-badge" hidden>PRO</span></h1></div>
         <span id="usage" class="muted"></span>
       </header>
 
       <button id="scan" type="button">Scan this page</button>
+      <p id="hint" class="hint">Open the page you want to check, then click “Scan this page”. LaunchReady looks for launch mistakes like noindex tags, staging URLs, missing titles and broken links.</p>
+      <p id="loading" class="loading" role="status" hidden><span class="spinner" aria-hidden="true"></span>Checking the page, its headers, robots.txt and links…</p>
       <p id="message" class="message" role="status" hidden></p>
       <button id="upgrade" class="secondary" type="button" hidden>Upgrade to Pro</button>
 
       <section id="results" hidden>
         <p id="page" class="muted"></p>
+        <p id="skipped" class="message" data-kind="skipped" hidden></p>
         <div class="summary">
           <div id="score" class="score" aria-label="Score"></div>
           <div id="counts" class="counts"></div>
@@ -32,6 +35,7 @@
         <button id="link-history" class="link" type="button">History</button>
         <button id="link-bulk" class="link" type="button">Bulk scan</button>
         <button id="link-settings" class="link" type="button">Settings</button>
+        <button id="link-privacy" class="link" type="button">Privacy</button>
       </footer>
     </main>
     <script type="module" src="./popup.ts"></script>

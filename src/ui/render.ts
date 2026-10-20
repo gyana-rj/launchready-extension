@@ -72,3 +72,9 @@ export function renderIssueList(container: HTMLElement, issues: Issue[], options
   const empty = problems.length ? [] : [el("p", "all-clear", "No problems found. This page looks ready to launch.")];
   container.replaceChildren(...empty, ...groups);
 }
+
+/** Note listing checks that couldn't run. Hidden when there are none. */
+export function renderSkipped(container: HTMLElement, skipped: string[] | undefined): void {
+  container.hidden = !skipped?.length;
+  container.replaceChildren(...(skipped ?? []).map((text) => el("span", undefined, text)));
+}

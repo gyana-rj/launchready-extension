@@ -39,7 +39,9 @@ async function render() {
 
 async function main() {
   renderNav($("nav"), "history");
-  if (!(await isPro())) {
+  const pro = await isPro();
+  $("loading").hidden = true;
+  if (!pro) {
     renderUpgradePrompt($("locked"), "Audit history");
     return;
   }

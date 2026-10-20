@@ -73,6 +73,10 @@ async function onStart() {
       return;
     }
     $("table").hidden = false;
+    $("empty").hidden = true;
+    $<HTMLProgressElement>("bar").max = urls.length;
+    $<HTMLProgressElement>("bar").value = 0;
+    $("bar").hidden = false;
     $("rows").replaceChildren(...urls.map((url) => rowFor(url)));
     $("progress").textContent = `Scanned 0 of ${urls.length}`;
 
@@ -81,6 +85,7 @@ async function onStart() {
     const rows = await bulkScan(urls, {
       onRow: (row, done, total) => {
         $("progress").textContent = `Scanned ${done} of ${total}`;
+        $<HTMLProgressElement>("bar").value = done;
         const saving = row.result ? addAudit(row.result) : Promise.resolve(undefined);
         saves.push(saving.then((saved) => document.querySelector(`tr[data-url="${CSS.escape(row.url)}"]`)?.replaceWith(rowFor(row.url, row, saved))));
       },
@@ -89,7 +94,10 @@ async function onStart() {
     scanned = rows.flatMap((row) => (row.result ? [row.result] : []));
     $("progress").textContent = `Done: ${scanned.length} of ${urls.length} scanned.`;
     $("export").hidden = scanned.length === 0;
+  } catch {
+    showNotice([...notices, "The bulk scan stopped unexpectedly. Check the addresses and try again."]);
   } finally {
+    $("bar").hidden = true;
     startButton.disabled = false;
   }
 }

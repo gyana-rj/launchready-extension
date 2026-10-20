@@ -65,9 +65,9 @@ describe("bulkScan", () => {
     expect(rows.map((r) => r.url)).toEqual(["https://a.com/", "https://b.com/", "https://c.com/", "https://d.com/", "https://down.com/"]);
     expect(rows[0].result?.score).toBeLessThan(100); // fixture canonical is another host
     expect(rows[1].result?.issues.map((i) => i.id)).toContain("noindex");
-    expect(rows[2].error).toBe("HTTP 404");
+    expect(rows[2].error).toBe("Page not found (HTTP 404)");
     expect(rows[3].error).toBe("Not an HTML page");
-    expect(rows[4].error).toBe("Could not load the page");
+    expect(rows[4].error).toContain("Could not load the page");
     expect(seen.sort()).toEqual([1, 2, 3, 4, 5]);
   });
 
@@ -80,6 +80,16 @@ describe("bulkScan", () => {
     const rows = await bulkScan(["https://a.com/", "https://a.com/"], { fetcher: counting });
     expect(robotsFetches).toBe(1);
     expect(rows[0].result?.issues.map((i) => i.id)).toContain("robots-txt-blocks-all");
+  });
+
+  it("explains other failures in plain language", async () => {
+    const responses: Record<string, Response> = {
+      "https://a.com/": new Response("", { status: 403 }),
+      "https://b.com/": new Response("", { status: 500 }),
+      "https://c.com/": new Response("%PDF", { headers: { "content-type": "application/pdf" } }),
+    };
+    const rows = await bulkScan(Object.keys(responses), { fetcher: async (url) => responses[url] ?? new Response("", { status: 404 }) });
+    expect(rows.map((r) => r.error)).toEqual(["Access denied (HTTP 403)", "Server error (HTTP 500)", "PDF files can't be scanned"]);
   });
 
   it("returns no rows for no URLs", async () => {

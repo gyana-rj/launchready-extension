@@ -22,6 +22,7 @@
           <button id="export" class="secondary" type="button" hidden>Export CSV</button>
           <span id="progress" class="muted" role="status"></span>
         </div>
+        <progress id="bar" max="1" value="0" aria-label="Bulk scan progress" hidden></progress>
         <p id="notice" class="message" hidden></p>
         <table id="table" hidden>
           <thead>
@@ -35,6 +36,7 @@
           </thead>
           <tbody id="rows"></tbody>
         </table>
+        <p id="empty" class="hint">Results will appear here. Pasting a sitemap's page list works well: one address per line.</p>
       </section>
     </main>
     <script type="module" src="./bulk.ts"></script>

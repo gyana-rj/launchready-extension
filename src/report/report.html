@@ -8,8 +8,10 @@
   <body>
     <main class="page-main">
       <nav id="nav"></nav>
+      <p id="loading" class="loading" role="status"><span class="spinner" aria-hidden="true"></span>Loading report…</p>
       <p id="empty" class="empty-state" hidden>No scan yet. Open the LaunchReady popup and scan a page first.</p>
 
+      <p id="fallback-note" class="message" data-kind="note" hidden>That audit is no longer in your history, so this is your most recent scan instead.</p>
       <div id="content" hidden>
         <section id="branding-locked" class="no-print"></section>
         <section id="branding-panel" class="panel no-print" hidden>
@@ -41,6 +43,7 @@
             <div><dt>Site</dt><dd id="page"></dd></div>
             <div><dt>Date</dt><dd id="report-date"></dd></div>
           </dl>
+          <p id="skipped" class="message" data-kind="skipped" hidden></p>
           <div class="summary">
             <div id="score" class="score" aria-label="Score"></div>
             <div id="counts" class="counts"></div>

@@ -264,7 +264,7 @@ test.describe("bulk scan", () => {
     await expect(rows.nth(0)).toContainText("100");
     await expect(rows.nth(0)).toContainText("Scanned");
     await expect(rows.nth(1)).toContainText("85");
-    await expect(rows.nth(2)).toContainText("Failed: HTTP 404");
+    await expect(rows.nth(2)).toContainText("Failed: Page not found (HTTP 404)");
 
     // Results are saved to history and can be exported.
     const history = await context.newPage();

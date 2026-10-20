@@ -32,6 +32,7 @@ export default defineConfig(({ mode }) => ({
         settings: resolve(import.meta.dirname, "src/settings/settings.html"),
         history: resolve(import.meta.dirname, "src/history/history.html"),
         bulk: resolve(import.meta.dirname, "src/bulk/bulk.html"),
+        privacy: resolve(import.meta.dirname, "src/privacy/privacy.html"),
         background: resolve(import.meta.dirname, "src/background/index.ts"),
       },
       output: {

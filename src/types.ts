@@ -18,6 +18,8 @@ export interface ScanResult {
   /** 0-100. */
   score: number;
   issues: Issue[];
+  /** Checks that couldn't run (for example a fetch failed). Shown to the user as a note. */
+  skipped?: string[];
 }
 
 /** A scan saved in the audit history. */

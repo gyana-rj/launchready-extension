@@ -1,6 +1,7 @@
 import "../ui/theme.css";
 import "./popup.css";
 import { config } from "../config";
+import { describeScanError } from "../errors";
 import { auditsToCsv, csvFilename, downloadFile } from "../csv";
 import { addAudit } from "../history";
 import { isPro } from "../license";
@@ -9,7 +10,7 @@ import { scanTab } from "../scan";
 import { saveLastScan } from "../store";
 import type { ScanResult } from "../types";
 import { openPage, PAGES } from "../ui/pro";
-import { renderCounts, renderIssueList, renderScore } from "../ui/render";
+import { renderCounts, renderIssueList, renderScore, renderSkipped } from "../ui/render";
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const scanButton = $<HTMLButtonElement>("scan");
@@ -30,6 +31,7 @@ function showResults(result: ScanResult) {
   renderScore($("score"), result.score);
   renderCounts($("counts"), result.issues);
   renderIssueList($("issues"), result.issues);
+  renderSkipped($("skipped"), result.skipped);
   $("results").hidden = false;
 }
 
@@ -65,29 +67,51 @@ async function targetTabId(): Promise<number | undefined> {
   return tab?.id;
 }
 
+function setScanning(scanning: boolean) {
+  scanButton.disabled = scanning;
+  scanButton.textContent = scanning ? "Scanning…" : "Scan this page";
+  $("loading").hidden = !scanning;
+  $("results").setAttribute("aria-busy", String(scanning));
+}
+
+/** Saves a finished scan. Returns false if browser storage refused (full or unavailable). */
+async function saveScan(result: ScanResult, pro: boolean): Promise<boolean> {
+  try {
+    if (pro) currentAuditId = (await addAudit(result)).id;
+    else await recordScan();
+    await saveLastScan(result);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function onScan() {
   const pro = await isPro();
   if (!pro && (await getRemainingScans()) === 0) return void (await refreshUsage());
 
-  scanButton.disabled = true;
-  scanButton.textContent = "Scanning…";
+  setScanning(true);
+  $("hint").hidden = true;
   $("message").hidden = true;
+  $("results").hidden = true;
+  currentAuditId = undefined;
   try {
     const tabId = await targetTabId();
     if (tabId === undefined) throw new Error("No active tab");
     const result = await scanTab(tabId);
-    if (pro) currentAuditId = (await addAudit(result)).id;
-    else await recordScan();
-    await saveLastScan(result);
     current = result;
+    const saved = await saveScan(result, pro);
     showResults(result);
-  } catch {
-    showMessage(
-      "This page can't be scanned. Browser pages (chrome://), the Chrome Web Store and other protected pages are off limits.",
-      "error",
-    );
+    if (!saved) {
+      showMessage(
+        "The scan finished, but it couldn't be saved because browser storage is full or unavailable. On the History page you can clear old audits.",
+        "error",
+      );
+    }
+  } catch (error) {
+    showMessage(describeScanError(error), "error");
   } finally {
-    scanButton.textContent = "Scan this page";
+    setScanning(false);
     await refreshUsage();
   }
 }
@@ -109,4 +133,5 @@ $("upgrade").addEventListener("click", () => openPage(PAGES.settings));
 $("link-history").addEventListener("click", () => openPage(PAGES.history));
 $("link-bulk").addEventListener("click", () => openPage(PAGES.bulk));
 $("link-settings").addEventListener("click", () => openPage(PAGES.settings));
+$("link-privacy").addEventListener("click", () => openPage(PAGES.privacy));
 void refreshUsage();

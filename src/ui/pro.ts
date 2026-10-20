@@ -6,6 +6,7 @@ export const PAGES = {
   history: "src/history/history.html",
   bulk: "src/bulk/bulk.html",
   report: "src/report/report.html",
+  privacy: "src/privacy/privacy.html",
 } as const;
 
 export function pageUrl(path: string): string {
@@ -44,6 +45,7 @@ export function renderNav(container: HTMLElement, current: keyof typeof PAGES): 
     ["history", "History"],
     ["bulk", "Bulk scan"],
     ["settings", "Settings"],
+    ["privacy", "Privacy"],
   ];
   container.className = "nav no-print";
   container.replaceChildren(

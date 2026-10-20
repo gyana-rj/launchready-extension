@@ -6,7 +6,7 @@ import { isPro } from "../license";
 import { loadLastScan } from "../store";
 import type { Branding } from "../types";
 import { renderNav, renderUpgradePrompt } from "../ui/pro";
-import { renderCounts, renderIssueList, renderScore } from "../ui/render";
+import { renderCounts, renderIssueList, renderScore, renderSkipped } from "../ui/render";
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const MAX_LOGO_BYTES = 1024 * 1024;
@@ -14,7 +14,10 @@ const MAX_LOGO_BYTES = 1024 * 1024;
 /** The audit from ?id= (history), otherwise the most recent scan. */
 async function loadAudit() {
   const id = new URLSearchParams(location.search).get("id");
-  return (id ? await getAudit(id) : undefined) ?? (await loadLastScan());
+  const fromHistory = id ? await getAudit(id) : undefined;
+  if (fromHistory) return { audit: fromHistory };
+  const last = await loadLastScan();
+  return { audit: last, missingId: !!id && !!last };
 }
 
 function renderBranding(branding: Branding, pro: boolean) {
@@ -75,7 +78,9 @@ function setupBrandingPanel(branding: Branding) {
 
 async function main() {
   renderNav($("nav"), "report");
-  const audit = await loadAudit();
+  const { audit, missingId } = await loadAudit();
+  $("loading").hidden = true;
+  $("fallback-note").hidden = !missingId;
   if (!audit) {
     $("empty").hidden = false;
     return;
@@ -85,6 +90,7 @@ async function main() {
   renderScore($("score"), audit.score);
   renderCounts($("counts"), audit.issues);
   renderIssueList($("issues"), audit.issues, { open: true });
+  renderSkipped($("skipped"), audit.skipped);
 
   const pro = await isPro();
   const branding = await getBranding();

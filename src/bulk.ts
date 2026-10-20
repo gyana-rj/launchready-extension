@@ -66,11 +66,21 @@ const TIMEOUT_MS = 15_000;
 const defaultFetcher: Fetcher = (url) =>
   fetch(url, { redirect: "follow", cache: "no-store", signal: AbortSignal.timeout(TIMEOUT_MS) });
 
+/** Plain-language reason for a non-OK response. */
+function statusMessage(status: number): string {
+  if (status === 404 || status === 410) return `Page not found (HTTP ${status})`;
+  if (status === 401 || status === 403) return `Access denied (HTTP ${status})`;
+  if (status === 429) return "Too many requests (HTTP 429)";
+  if (status >= 500) return `Server error (HTTP ${status})`;
+  return `HTTP ${status}`;
+}
+
 async function scanOne(url: string, fetcher: Fetcher, robotsFor: (origin: string) => Promise<string | undefined>): Promise<BulkRow> {
   try {
     const res = await fetcher(url);
-    if (!res.ok) return { url, error: `HTTP ${res.status}` };
+    if (!res.ok) return { url, error: statusMessage(res.status) };
     const type = res.headers.get("content-type");
+    if (type && /pdf/i.test(type)) return { url, error: "PDF files can't be scanned" };
     if (type && !/html/i.test(type)) return { url, error: "Not an HTML page" };
 
     const html = await res.text();
@@ -80,7 +90,7 @@ async function scanOne(url: string, fetcher: Fetcher, robotsFor: (origin: string
     return { url, result: auditHtml(html, finalUrl, headers, robotsTxt) };
   } catch (error) {
     const timedOut = error instanceof DOMException && error.name === "TimeoutError";
-    return { url, error: timedOut ? "Timed out" : "Could not load the page" };
+    return { url, error: timedOut ? "Timed out (the site took too long)" : "Could not load the page (unreachable, or it blocked the request)" };
   }
 }
 
